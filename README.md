@@ -1,1 +1,1 @@
-# vanilla-flashcards
+# Vanilla Flashcards
