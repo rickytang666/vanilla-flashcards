@@ -1,0 +1,16 @@
+* {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+body header {
+    background-color: rgb(4, 34, 79);
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+body header .logo {
+    width: 100px;
+    height: auto;
+    margin: 10px;
+}
