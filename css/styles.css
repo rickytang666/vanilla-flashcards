@@ -6,11 +6,31 @@ body header {
     background-color: rgb(4, 34, 79);
     color: white;
     display: flex;
-    align-items: center;
+    align-content: center;
 }
 
 body header .logo {
     width: 100px;
     height: auto;
     margin: 10px;
+}
+
+body header .text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+body header .text h1 {
+    text-shadow:
+        0 0 5px #fff,
+        0 0 7px rgb(251, 161, 224),
+        0 0 22px rgb(255, 0, 212);
+}
+
+body header .text small {
+    font-size: 1em;
+    color: #dbd8d8;
+    font-style: italic;
+    font-weight: 100;
 }
