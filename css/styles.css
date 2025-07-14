@@ -354,7 +354,7 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     min-height: 80px;
 }
 
@@ -362,59 +362,35 @@ html, body {
     font-size: 28px;
     margin-bottom: 5px;
     line-height: 1;
+    margin-top: 8px;
 }
 
 .grade-text {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: normal;
     text-align: center;
     line-height: 1.2;
     hyphens: auto;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
 }
 
-.btn-cooked {
-    background: #ff4757;
-    color: white;
-}
-
-.btn-cooked:hover {
-    background: #ff3838;
-}
-
-.btn-not-remembering {
-    background: #ff6b6b;
-    color: white;
-}
-
-.btn-not-remembering:hover {
-    background: #ff5252;
-}
-
-.btn-partially {
-    background: #ffd93d;
-    color: #333;
-}
-
-.btn-partially:hover {
-    background: #ffcd02;
-}
-
-.btn-effort {
-    background: #3742fa;
-    color: white;
-}
-
-.btn-effort:hover {
-    background: #2f3542;
-}
-
+.btn-cooked,
+.btn-not-remembering,
+.btn-partially,
+.btn-effort,
 .btn-slayed {
-    background: #2ed573;
+    background: #378197;
     color: white;
 }
 
+.btn-cooked:hover,
+.btn-not-remembering:hover,
+.btn-partially:hover,
+.btn-effort:hover,
 .btn-slayed:hover {
-    background: #26d067;
+    background: #0056b3;
 }
 
 .flip-message {

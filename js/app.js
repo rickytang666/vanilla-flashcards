@@ -288,8 +288,12 @@ class FlashcardApp {
     addKeyboardListeners() {
         this.keyboardHandler = (e) => {
             if (e.key === 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
                 this.hidePracticeModal();
             } else if (this.showFront) {
+                e.preventDefault();
+                e.stopPropagation();
                 this.flipCard();
             }
         };
@@ -363,8 +367,10 @@ class FlashcardApp {
 
     addGradingListeners(modal) {
         modal.addEventListener('click', (e) => {
-            if (e.target.classList.contains('btn-grade')) {
-                const grade = e.target.getAttribute('data-grade');
+            // Find the button element (could be the target or a parent)
+            const button = e.target.closest('.btn-grade');
+            if (button) {
+                const grade = button.getAttribute('data-grade');
                 this.gradeCard(grade);
             }
         });
@@ -374,7 +380,7 @@ class FlashcardApp {
         const currentCard = this.practiceQueue[this.currentPracticeIndex];
         
         // Set retention score directly to the grade (0-4)
-        currentCard.retentionScore = parseInt(grade);
+        currentCard.retentionScore += parseInt(grade);
 
         // Update modified time
         currentCard.modifiedTime = Date.now();
