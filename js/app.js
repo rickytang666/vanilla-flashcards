@@ -1,3 +1,13 @@
+// flashcard class
+class Flashcard {
+    constructor() {
+        this.question = '[EMPTY]';
+        this.answer = '[EMPTY]';
+        this.modifiedTime = Date.now();
+        this.retentionScore = 0;
+    }
+}
+
 // local storage manager
 class FlashcardStorage {
     constructor() {
@@ -41,6 +51,29 @@ class FlashcardApp {
         this.loadFlashcards();
         // this.addTestData();
         this.render();
+
+        this.mainElement.addEventListener('click', (event) => {
+            if (event.target.classList.contains('btn-create')) {
+                console.log('Add button clicked');
+                const newCard = new Flashcard();
+                newCard.id = Date.now(); // simple ID
+                this.flashcards.push(newCard);
+                this.storage.saveFlashcards(this.flashcards); // save to localStorage
+                this.render();
+            }
+
+            if (event.target.classList.contains('btn-delete')) {
+                const cardId = event.target.getAttribute('data-id'); // get id
+                this.flashcards = this.flashcards.filter(card => card.id != cardId); // filter the array
+                this.storage.saveFlashcards(this.flashcards); // save to localStorage
+                this.render();
+            }            
+            
+            if (event.target.classList.contains('btn-edit')) {
+                const cardId = event.target.getAttribute('data-id');
+                this.showEditModal(cardId);
+            }
+        });
     }
 
     loadFlashcards() {
@@ -68,6 +101,16 @@ class FlashcardApp {
         // clear main element content
         this.mainElement.innerHTML = '';
 
+        // Always show the "Add New Flashcard" button
+        const headerDiv = document.createElement('div');
+        headerDiv.innerHTML = `
+            <div class="flashcards-header">
+                <h2>Your Flashcards (${this.flashcards.length})</h2>
+                <button class="btn-create">+ Create New Flashcard</button>
+            </div>
+        `;
+        this.mainElement.appendChild(headerDiv);
+
         if (this.flashcards.length === 0) {
             // Show empty state message
             const emptyDiv = document.createElement('div');
@@ -75,21 +118,10 @@ class FlashcardApp {
                 <div class="empty-state">
                     <h2>No flashcards yet!</h2>
                     <p>Create your first flashcard to get started with learning.</p>
-                    <button class="btn-primary">+ Create First Flashcard</button>
                 </div>
             `;
             this.mainElement.appendChild(emptyDiv);
         } else {
-            // Show flashcards as cards
-            const headerDiv = document.createElement('div');
-            headerDiv.innerHTML = `
-                <div class="flashcards-header">
-                    <h2>Your Flashcards (${this.flashcards.length})</h2>
-                    <button class="btn-primary">+ Add New Flashcard</button>
-                </div>
-            `;
-            this.mainElement.appendChild(headerDiv);
-
             // Create cards grid
             const cardsGrid = document.createElement('div');
             cardsGrid.className = 'cards-grid';
@@ -113,6 +145,75 @@ class FlashcardApp {
             });
 
             this.mainElement.appendChild(cardsGrid);
+        }
+    }
+
+    showEditModal(cardId) {
+        // Find the flashcard to edit
+        const flashcard = this.flashcards.find(card => card.id == cardId);
+        if (!flashcard) return;
+
+        // Create modal overlay
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>Edit Flashcard</h2>
+                <form class="edit-form">
+                    <div class="form-group">
+                        <label for="edit-question">Question:</label>
+                        <textarea id="edit-question" name="question" rows="3" required>${flashcard.question}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-answer">Answer:</label>
+                        <textarea id="edit-answer" name="answer" rows="3" required>${flashcard.answer}</textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Save Changes</button>
+                        <button type="button" class="btn-cancel">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        `;
+
+        // Add event listeners
+        modal.querySelector('.btn-cancel').addEventListener('click', () => this.hideEditModal());
+        modal.querySelector('.btn-save').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.saveEditedCard(cardId);
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) this.hideEditModal();
+        });
+
+        // Add to page
+        document.body.appendChild(modal);
+    }
+
+    hideEditModal() {
+        const modal = document.querySelector('.modal-overlay');
+        if (modal) {
+            modal.remove();
+        }
+    }
+
+    saveEditedCard(cardId) {
+        const questionInput = document.getElementById('edit-question');
+        const answerInput = document.getElementById('edit-answer');
+
+        // Find and update the flashcard
+        const flashcard = this.flashcards.find(card => card.id == cardId);
+        if (flashcard) {
+            flashcard.question = questionInput.value.trim();
+            flashcard.answer = answerInput.value.trim();
+            flashcard.modifiedTime = Date.now();
+
+            // Save and refresh
+            this.storage.saveFlashcards(this.flashcards);
+            this.render();
+            this.hideEditModal();
         }
     }
 }
