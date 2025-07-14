@@ -39,6 +39,7 @@ class FlashcardStorage {
 
 // app controller
 class FlashcardApp {
+    
     constructor() {
         this.storage = new FlashcardStorage();
         this.flashcards = [];
@@ -98,6 +99,9 @@ class FlashcardApp {
     }
 
     render() {
+        // Sort flashcards by modified time (newest first) before rendering
+        this.sortNewest();
+        
         // clear main element content
         this.mainElement.innerHTML = '';
 
@@ -215,6 +219,10 @@ class FlashcardApp {
             this.render();
             this.hideEditModal();
         }
+    }
+
+    sortNewest() {
+        this.flashcards.sort((a, b) => b.modifiedTime - a.modifiedTime);
     }
 }
 
