@@ -74,6 +74,10 @@ class FlashcardApp {
                 const cardId = event.target.getAttribute('data-id');
                 this.showEditModal(cardId);
             }
+
+            if (event.target.classList.contains('btn-practice')) {
+                this.startPracticeMode();
+            }
         });
     }
 
@@ -110,7 +114,10 @@ class FlashcardApp {
         headerDiv.innerHTML = `
             <div class="flashcards-header">
                 <h2>Your Flashcards (${this.flashcards.length})</h2>
-                <button class="btn-create">+ Create New Flashcard</button>
+                <div class="header-buttons">
+                    ${this.flashcards.length > 0 ? '<button class="btn-practice">🎯 Practice</button>' : ''}
+                    <button class="btn-create">+ Create New Flashcard</button>
+                </div>
             </div>
         `;
         this.mainElement.appendChild(headerDiv);
@@ -223,6 +230,209 @@ class FlashcardApp {
 
     sortNewest() {
         this.flashcards.sort((a, b) => b.modifiedTime - a.modifiedTime);
+    }
+
+    startPracticeMode() {
+        if (this.flashcards.length === 0) {
+            alert('No flashcards to practice!');
+            return;
+        }
+
+        // Sort flashcards by retention score (ascending - lowest first)
+        this.practiceQueue = [...this.flashcards].sort((a, b) => a.retentionScore - b.retentionScore);
+        this.currentPracticeIndex = 0;
+        this.showFront = true;
+        
+        this.showPracticeModal();
+    }
+
+    showPracticeModal() {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay practice-modal';
+        modal.innerHTML = `
+            <div class="modal-content practice-content">
+                <div class="practice-header">
+                    <h2>Practice Mode</h2>
+                    <button class="btn-close" title="Close Practice">×</button>
+                </div>
+                <div class="practice-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${(this.currentPracticeIndex / this.practiceQueue.length) * 100}%"></div>
+                    </div>
+                    <span class="progress-text">${this.currentPracticeIndex + 1} / ${this.practiceQueue.length}</span>
+                </div>
+                <div class="practice-card">
+                    ${this.renderPracticeCard()}
+                </div>
+                <div class="practice-actions">
+                    ${this.renderPracticeActions()}
+                </div>
+            </div>
+        `;
+
+        // Add event listeners
+        modal.querySelector('.btn-close').addEventListener('click', () => this.hidePracticeModal());
+        
+        // Add keyboard listeners
+        this.addKeyboardListeners();
+        
+        // Add card flip listener
+        modal.querySelector('.practice-card').addEventListener('click', () => this.flipCard());
+        
+        // Add grading listeners
+        this.addGradingListeners(modal);
+
+        document.body.appendChild(modal);
+    }
+
+    addKeyboardListeners() {
+        this.keyboardHandler = (e) => {
+            if (e.key === 'Escape') {
+                this.hidePracticeModal();
+            } else if (this.showFront) {
+                this.flipCard();
+            }
+        };
+        document.addEventListener('keydown', this.keyboardHandler);
+    }
+
+    removeKeyboardListeners() {
+        if (this.keyboardHandler) {
+            document.removeEventListener('keydown', this.keyboardHandler);
+        }
+    }
+
+    renderPracticeCard() {
+        const currentCard = this.practiceQueue[this.currentPracticeIndex];
+        
+        if (this.showFront) {
+            return `
+                <div class="card-front">
+                    <div class="card-label">Question:</div>
+                    <div class="card-content">${currentCard.question}</div>
+                    <div class="flip-hint">Click to reveal answer</div>
+                </div>
+            `;
+        } else {
+            return `
+                <div class="card-back">
+                    <div class="card-label">Answer:</div>
+                    <div class="card-content">${currentCard.answer}</div>
+                </div>
+            `;
+        }
+    }
+
+    renderPracticeActions() {
+        if (this.showFront) {
+            return `<div class="flip-message">Press any key (except ESC) to see the answer</div>`;
+        } else {
+            return `
+                <div class="grading-buttons">
+                    <button class="btn-grade btn-cooked" data-grade="0">
+                        <div class="grade-emoji">🥵</div>
+                        <div class="grade-text">Cooked</div>
+                    </button>
+                    <button class="btn-grade btn-not-remembering" data-grade="1">
+                        <div class="grade-emoji">😵</div>
+                        <div class="grade-text">Not remembering much</div>
+                    </button>
+                    <button class="btn-grade btn-partially" data-grade="2">
+                        <div class="grade-emoji">🤔</div>
+                        <div class="grade-text">Partially recalled</div>
+                    </button>
+                    <button class="btn-grade btn-effort" data-grade="3">
+                        <div class="grade-emoji">😉</div>
+                        <div class="grade-text">Recalled with effort</div>
+                    </button>
+                    <button class="btn-grade btn-slayed" data-grade="4">
+                        <div class="grade-emoji">😆</div>
+                        <div class="grade-text">Slayed</div>
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    flipCard() {
+        if (this.showFront) {
+            this.showFront = false;
+            this.updatePracticeModal();
+        }
+    }
+
+    addGradingListeners(modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-grade')) {
+                const grade = e.target.getAttribute('data-grade');
+                this.gradeCard(grade);
+            }
+        });
+    }
+
+    gradeCard(grade) {
+        const currentCard = this.practiceQueue[this.currentPracticeIndex];
+        
+        // Set retention score directly to the grade (0-4)
+        currentCard.retentionScore = parseInt(grade);
+
+        // Update modified time
+        currentCard.modifiedTime = Date.now();
+
+        // Move to next card
+        this.currentPracticeIndex++;
+        this.showFront = true;
+
+        if (this.currentPracticeIndex >= this.practiceQueue.length) {
+            this.showPracticeComplete();
+        } else {
+            this.updatePracticeModal();
+        }
+
+        // Save changes to localStorage
+        this.storage.saveFlashcards(this.flashcards);
+    }
+
+    updatePracticeModal() {
+        const modal = document.querySelector('.practice-modal');
+        if (modal) {
+            modal.querySelector('.practice-card').innerHTML = this.renderPracticeCard();
+            modal.querySelector('.practice-actions').innerHTML = this.renderPracticeActions();
+            modal.querySelector('.progress-fill').style.width = `${(this.currentPracticeIndex / this.practiceQueue.length) * 100}%`;
+            modal.querySelector('.progress-text').textContent = `${this.currentPracticeIndex + 1} / ${this.practiceQueue.length}`;
+        }
+    }
+
+    showPracticeComplete() {
+        const modal = document.querySelector('.practice-modal');
+        if (modal) {
+            modal.querySelector('.modal-content').innerHTML = `
+                <div class="practice-header">
+                    <h2>Practice Complete!</h2>
+                    <button class="btn-close" title="Close Practice">×</button>
+                </div>
+                <div class="practice-complete">
+                    <div class="complete-icon">🎉</div>
+                    <h3>Great job!</h3>
+                    <p>You've finished practicing all ${this.practiceQueue.length} flashcards.</p>
+                    <button class="btn-done">Done</button>
+                </div>
+            `;
+            
+            // Add close listeners
+            modal.querySelector('.btn-close').addEventListener('click', () => this.hidePracticeModal());
+            modal.querySelector('.btn-done').addEventListener('click', () => this.hidePracticeModal());
+        }
+    }
+
+    hidePracticeModal() {
+        const modal = document.querySelector('.practice-modal');
+        if (modal) {
+            modal.remove();
+        }
+        this.removeKeyboardListeners();
+        // Re-render main page to show updated retention scores
+        this.render();
     }
 }
 

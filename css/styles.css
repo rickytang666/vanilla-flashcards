@@ -232,3 +232,243 @@ html, body {
 .empty-state h2 {
     color: #495057;
 }
+
+/* Practice Mode Styles */
+.practice-modal .modal-content {
+    max-width: 600px;
+    min-height: 400px;
+}
+
+.practice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.btn-close {
+    background: #dc3545;
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-close:hover {
+    background: #c82333;
+}
+
+.practice-progress {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #f1f1f1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: rgb(4, 34, 79);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-weight: bold;
+    color: rgb(4, 34, 79);
+    min-width: 60px;
+}
+
+.practice-card {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 30px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.practice-card:hover {
+    border-color: rgb(4, 34, 79);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #6c757d;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.card-content {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.flip-hint {
+    font-size: 12px;
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+}
+
+.grading-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.btn-grade {
+    border: none;
+    padding: 15px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    flex: 1;
+    max-width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+}
+
+.grade-emoji {
+    font-size: 28px;
+    margin-bottom: 5px;
+    line-height: 1;
+}
+
+.grade-text {
+    font-size: 11px;
+    font-weight: normal;
+    text-align: center;
+    line-height: 1.2;
+    hyphens: auto;
+}
+
+.btn-cooked {
+    background: #ff4757;
+    color: white;
+}
+
+.btn-cooked:hover {
+    background: #ff3838;
+}
+
+.btn-not-remembering {
+    background: #ff6b6b;
+    color: white;
+}
+
+.btn-not-remembering:hover {
+    background: #ff5252;
+}
+
+.btn-partially {
+    background: #ffd93d;
+    color: #333;
+}
+
+.btn-partially:hover {
+    background: #ffcd02;
+}
+
+.btn-effort {
+    background: #3742fa;
+    color: white;
+}
+
+.btn-effort:hover {
+    background: #2f3542;
+}
+
+.btn-slayed {
+    background: #2ed573;
+    color: white;
+}
+
+.btn-slayed:hover {
+    background: #26d067;
+}
+
+.flip-message {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+}
+
+.practice-complete {
+    text-align: center;
+    padding: 40px;
+}
+
+.complete-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.practice-complete h3 {
+    color: rgb(4, 34, 79);
+    margin-bottom: 10px;
+}
+
+.btn-done {
+    background: rgb(4, 34, 79);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.btn-done:hover {
+    background: rgb(6, 45, 105);
+}
+
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-practice {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-practice:hover {
+    background: #218838;
+}
