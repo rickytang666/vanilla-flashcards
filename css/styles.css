@@ -393,6 +393,30 @@ html, body {
     background: #0056b3;
 }
 
+.hotkey-description {
+    display: flex;
+    font-weight: lighter;
+    font-size: 11;
+    text-align: center;
+    margin-top: 5px;
+    align-items: center;
+}
+
+.hotkey-description .hotkey {
+    border: 1px solid white;
+    padding: 4px;
+    border-radius: 25%; /* [ratio] of the element's width */
+    background: rgba(255, 255, 255, 0.2);
+    margin-left: 5px;
+    font-weight: bold;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
 .flip-message {
     text-align: center;
     color: #6c757d;

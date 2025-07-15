@@ -238,8 +238,8 @@ class FlashcardApp {
             return;
         }
 
-        // Sort flashcards by retention score (ascending - lowest first)
-        this.practiceQueue = [...this.flashcards].sort((a, b) => a.retentionScore - b.retentionScore);
+        // Sort flashcards by retention score ascending
+        this.practiceQueue = [...this.flashcards].sort((a, b) => a.retentionScore - b.retentionScore); // spread syntax
         this.currentPracticeIndex = 0;
         this.showFront = true;
         
@@ -292,9 +292,25 @@ class FlashcardApp {
                 e.stopPropagation();
                 this.hidePracticeModal();
             } else if (this.showFront) {
+                // any key except ESC flips the card
                 e.preventDefault();
                 e.stopPropagation();
                 this.flipCard();
+            } else {
+                // grading hotkeys
+                const gradeKeys = {
+                    'h' : '0',
+                    'j' : '1',
+                    'k' : '2',
+                    'l' : '3',
+                    ';' : '4'
+                };
+
+                if (gradeKeys[e.key.toLowerCase()]) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.gradeCard(gradeKeys[e.key.toLowerCase()]);
+                }
             }
         };
         document.addEventListener('keydown', this.keyboardHandler);
@@ -336,22 +352,42 @@ class FlashcardApp {
                     <button class="btn-grade btn-cooked" data-grade="0">
                         <div class="grade-emoji">🥵</div>
                         <div class="grade-text">Cooked</div>
+                        <div class="hotkey-description">
+                            <p>Press</p>
+                            <p class="hotkey">H</p>
+                        </div>
                     </button>
                     <button class="btn-grade btn-not-remembering" data-grade="1">
                         <div class="grade-emoji">😵</div>
                         <div class="grade-text">Not remembering much</div>
+                        <div class="hotkey-description">
+                            <p>Press</p>
+                            <p class="hotkey">J</p>
+                        </div>
                     </button>
                     <button class="btn-grade btn-partially" data-grade="2">
                         <div class="grade-emoji">🤔</div>
                         <div class="grade-text">Partially recalled</div>
+                        <div class="hotkey-description">
+                            <p>Press</p>
+                            <p class="hotkey">K</p>
+                        </div>
                     </button>
                     <button class="btn-grade btn-effort" data-grade="3">
                         <div class="grade-emoji">😉</div>
                         <div class="grade-text">Recalled with effort</div>
+                        <div class="hotkey-description">
+                            <p>Press</p>
+                            <p class="hotkey">L</p>
+                        </div>
                     </button>
                     <button class="btn-grade btn-slayed" data-grade="4">
                         <div class="grade-emoji">😆</div>
                         <div class="grade-text">Slayed</div>
+                        <div class="hotkey-description">
+                            <p>Press</p>
+                            <p class="hotkey">;</p>
+                        </div>
                     </button>
                 </div>
             `;
