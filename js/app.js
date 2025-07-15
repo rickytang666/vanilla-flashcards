@@ -413,6 +413,15 @@ class FlashcardApp {
     }
 
     gradeCard(grade) {
+        // Flash the button
+        const flashDuration = 150;
+        const button = document.querySelector(`[data-grade="${grade}"]`);
+        if (button) {
+            button.classList.add('btn-grade-active');
+            setTimeout(() => button.classList.remove('btn-grade-active'), flashDuration + 5);
+        }
+        
+        // Process the grade
         const currentCard = this.practiceQueue[this.currentPracticeIndex];
         
         // Set retention score directly to the grade (0-4)
@@ -425,11 +434,14 @@ class FlashcardApp {
         this.currentPracticeIndex++;
         this.showFront = true;
 
-        if (this.currentPracticeIndex >= this.practiceQueue.length) {
-            this.showPracticeComplete();
-        } else {
-            this.updatePracticeModal();
-        }
+        // Delay the HTML update so highlight can be seen
+        setTimeout(() => {
+            if (this.currentPracticeIndex >= this.practiceQueue.length) {
+                this.showPracticeComplete();
+            } else {
+                this.updatePracticeModal();
+            }
+        }, flashDuration);
 
         // Save changes to localStorage
         this.storage.saveFlashcards(this.flashcards);
