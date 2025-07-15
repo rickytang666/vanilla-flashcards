@@ -113,7 +113,10 @@ class FlashcardApp {
         const headerDiv = document.createElement('div');
         headerDiv.innerHTML = `
             <div class="flashcards-header">
-                <h2>Your Flashcards (${this.flashcards.length})</h2>
+                <div class="header-data">
+                    <h2>Your Flashcards:</h2>
+                    <h2 class="number">${this.flashcards.length}</h2>
+                </div>
                 <div class="header-buttons">
                     ${this.flashcards.length > 0 ? '<button class="btn-practice">🎯 Practice</button>' : ''}
                     <button class="btn-create">+ Create New Flashcard</button>
@@ -148,8 +151,12 @@ class FlashcardApp {
                         <strong>A:</strong> ${flashcard.answer}
                     </div>
                     <div class="card-actions">
-                        <button class="btn-edit" data-id="${flashcard.id}">Edit</button>
-                        <button class="btn-delete" data-id="${flashcard.id}">Delete</button>
+                        <button class="btn-edit" data-id="${flashcard.id}">
+                            <i class="material-symbols-outlined">edit</i>Edit
+                        </button>
+                        <button class="btn-delete" data-id="${flashcard.id}">
+                            <i class="material-symbols-outlined">delete</i>Delete
+                        </button>
                     </div>
                 `;
                 cardsGrid.appendChild(cardDiv);
