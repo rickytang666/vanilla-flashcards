@@ -118,8 +118,11 @@ class FlashcardApp {
                     <h2 class="number">${this.flashcards.length}</h2>
                 </div>
                 <div class="header-buttons">
-                    ${this.flashcards.length > 0 ? '<button class="btn-practice">🎯 Practice</button>' : ''}
-                    <button class="btn-create">+ Create New Flashcard</button>
+                    ${this.flashcards.length > 0 ? '<button class="btn-practice"><i class="material-symbols-outlined">play_circle</i> Practice</button>' : ''}
+                    <button class="btn-create">
+                        <i class="material-symbols-outlined">add_circle</i>
+                        Create New Flashcard
+                    </button>
                 </div>
             </div>
         `;

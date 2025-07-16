@@ -29,7 +29,6 @@ body header .text {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    align-items: center;
     padding: 15px 0;
 }
 
@@ -165,16 +164,42 @@ html, body {
     margin-bottom: 20px;
 }
 
+/* Mobile responsive design for flashcards header */
+@media (max-width: 768px) {
+    .flashcards-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .flashcards-header .header-data {
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .flashcards-header .header-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-practice, .btn-create {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 18px;
+    }
+}
+
 .flashcards-header .header-data {
     background-color: rgba(255, 255, 255, 0.4);
-    padding: 10px 20px;
+    padding: 0 20px;
     border-radius: 50px;
     display: flex;
     align-items: center;
 }
 
 .flashcards-header .header-data:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(253, 211, 231, 0.9);
     transition: all 0.3s ease;
 }
 
@@ -189,18 +214,37 @@ html, body {
     border-radius: 25%;
 }
 
-.btn-create {
-    background-color: rgb(4, 34, 79);
+.btn-practice, .btn-create {
+    background-color: #007bff;
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.btn-practice i, .btn-create i {
+    margin-right: 5px;
+}
+
+.btn-practice {
+    background: #28a745;
+}
+
+.btn-practice:hover {
+    background: #28bd48;
+}
+
+.btn-create {
+    background-color: rgb(4, 34, 79);
 }
 
 .btn-create:hover {
-    background-color: rgb(6, 45, 105);
+    background-color: rgb(11, 75, 171);
 }
 
 .cards-grid {
@@ -246,10 +290,10 @@ html, body {
 .btn-edit, .btn-delete {
     padding: 5px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
-    font-weight: normal;
+    font-weight: 500;
     display: flex;
     align-items: center;
 }
@@ -501,18 +545,4 @@ html, body {
 .header-buttons {
     display: flex;
     gap: 10px;
-}
-
-.btn-practice {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.btn-practice:hover {
-    background: #218838;
 }
