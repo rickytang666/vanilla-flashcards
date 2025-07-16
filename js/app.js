@@ -54,7 +54,9 @@ class FlashcardApp {
         this.render();
 
         this.mainElement.addEventListener('click', (event) => {
-            if (event.target.classList.contains('btn-create')) {
+            // Use closest() to find the button element even if clicking on child elements like icons
+            const createBtn = event.target.closest('.btn-create');
+            if (createBtn) {
                 console.log('Add button clicked');
                 const newCard = new Flashcard();
                 newCard.id = Date.now(); // simple ID
@@ -63,19 +65,22 @@ class FlashcardApp {
                 this.render();
             }
 
-            if (event.target.classList.contains('btn-delete')) {
-                const cardId = event.target.getAttribute('data-id'); // get id
+            const deleteBtn = event.target.closest('.btn-delete');
+            if (deleteBtn) {
+                const cardId = deleteBtn.getAttribute('data-id'); // get id
                 this.flashcards = this.flashcards.filter(card => card.id != cardId); // filter the array
                 this.storage.saveFlashcards(this.flashcards); // save to localStorage
                 this.render();
             }            
             
-            if (event.target.classList.contains('btn-edit')) {
-                const cardId = event.target.getAttribute('data-id');
+            const editBtn = event.target.closest('.btn-edit');
+            if (editBtn) {
+                const cardId = editBtn.getAttribute('data-id');
                 this.showEditModal(cardId);
             }
 
-            if (event.target.classList.contains('btn-practice')) {
+            const practiceBtn = event.target.closest('.btn-practice');
+            if (practiceBtn) {
                 this.startPracticeMode();
             }
         });
