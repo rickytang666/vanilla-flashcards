@@ -1,9 +1,8 @@
-<div style="display: flex; align-items: center; margin: 0; gap: 10px;">
-  <img src="assets/images/logo.svg" width="70" alt="Logo" style="display: block;" />
+<div align="center">
+  <img src="assets/images/logo.svg" width="150" alt="Logo" />
   <h1>Vanilla Flashcards</h1>
+  <p>Simple, effective flashcards web app for learning</p>
 </div>
-
-A simple flashcard app built with vanilla JavaScript.
 
 ## Features
 
